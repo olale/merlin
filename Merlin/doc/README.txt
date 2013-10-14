@@ -55,12 +55,6 @@ Adding functionality:
 	 (see https://github.com/seattlerb/zentest)
 	 Look at existing tests for inspiration.
 
-**************************************
-	ScriptDb
-**************************************
-
-ScriptDb.exe has been extended with functionality for scripting
-User-defined Table Types, see the comment in DatabaseScripter.cs
 
 **************************************
 	Emacs
@@ -137,15 +131,4 @@ rake -T
       upgrader.run
     end
 
-**************************************
-	Jenkins
-**************************************
-
-The CI (Continuous Integration) server installed locally is Jenkins,
-running on STO-DEVVPLB01 (http://10.0.17.100:8080).
-
-Jenkins documentation in general can be found at http://jenkins-ci.org/
-
-All Jenkins slaves must be set up to run as services under a user
-account that has TFS access (E.g. Allocatesoftwar\Builder.Bob).
 
