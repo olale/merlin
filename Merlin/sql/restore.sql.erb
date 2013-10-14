@@ -1,0 +1,64 @@
+if not exists(select * from master.sys.databases where [name]='<%= db %>')
+begin
+    create database <%= db %>
+end
+go
+
+declare @strDatabase varchar(130)='<%= db %>' 
+declare @strBackupFile varchar(500)='<%= bak_file %>' 
+declare @strRestoreMDFFilesTo varchar(500)='c:\MSSQL\Data\'
+declare @strRestoreLDFFilesTo varchar(500)='c:\MSSQL\Data\'
+declare @strRestoreNDFFilesTo varchar(500)='c:\MSSQL\Data\'
+
+-- other variables used
+declare @strSQL nvarchar(max)
+declare @strOriginalPhysicalName varchar(150)
+declare @strPhysicalName varchar(150)
+declare @strLogicalName varchar(150)
+declare @intReturn int
+
+-- begin restoring
+begin try
+    drop table #tmpFilelist
+end try
+begin catch
+end catch
+create table #tmpFilelist (
+    LogicalName varchar(64), PhysicalName varchar(130), [Type] varchar(1), FileGroupName varchar(64), Size decimal(20, 0)
+    ,MaxSize decimal(25, 0), FileID bigint, CreateLSN decimal(25,0), DropLSN decimal(25,0), UniqueID uniqueidentifier
+    ,ReadOnlyLSN decimal(25,0), ReadWriteLSN decimal(25,0), BackSizeInBytes decimal(25,0), SourceBlockSize int
+    ,filegroupid int, loggroupguid uniqueidentifier, differentialbaseLSN decimal(25,0), differentialbaseGUID uniqueidentifier
+    ,isreadonly bit, ispresent bit, TDEThumbpr decimal
+)
+    print 'Restoring '+@strDatabase+' db ...'
+    use master
+    exec msdb.dbo.sp_delete_database_backuphistory @database_name = @strDatabase
+    use [master]
+    exec('alter database '+@strDatabase+' set single_user with rollback immediate')
+    use [master]
+    exec('drop database '+@strDatabase)
+    insert into #tmpFilelist
+        exec('restore filelistonly from disk = '''+@strBackupFile+'''')
+    set @strSQL='restore database ['+@strDatabase+'] from disk='''+@strBackupFile+''' with '
+    set @strSQL=@strSQL+ 'file=1 '
+    set @strSQL=@strSQL+ ',nounload '
+    set @strSQL=@strSQL+ ',replace '
+    set @strSQL=@strSQL+ ',stats=10 ' -- show restore status every 10%
+    while exists(select * from #tmpFilelist)
+    begin
+        select top 1 @strOriginalPhysicalName=PhysicalName, @strLogicalName=LogicalName from #tmpFilelist
+        set @strPhysicalName=@strOriginalPhysicalName
+        set @strPhysicalName=reverse(@strPhysicalName)
+        set @strPhysicalName=left(@strPhysicalName, charindex('\', @strPhysicalName)-1)
+        set @strPhysicalName=reverse(@strPhysicalName)
+        set @strPhysicalName=replace(@strPhysicalName, '.', '_'+@strDatabase+'.')
+        if @strPhysicalName like '%.mdf'
+            set @strPhysicalName=@strRestoreMDFFilesTo+@strPhysicalName
+        else if @strPhysicalName like '%.ldf'
+            set @strPhysicalName=@strRestoreLDFFilesTo+@strPhysicalName
+        else
+            set @strPhysicalName=@strRestoreNDFFilesTo+@strPhysicalName
+        set @strSQL=@strSQL+ ',move '''+@strLogicalName+''' to '''+@strPhysicalName+''' '
+        delete from #tmpFilelist where PhysicalName=@strOriginalPhysicalName
+    end
+    execute @intReturn=sp_executesql @strSQL

@@ -1,0 +1,4 @@
+
+1. verifiering av de kryptografiska signaturerna av filerna man
+distribuerar, kontrollerat mot en säker källa, gärna 256 bitars sha-1
+

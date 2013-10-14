@@ -1,0 +1,2 @@
+name=Time Care Build automation tool
+load-path= .:lib:test

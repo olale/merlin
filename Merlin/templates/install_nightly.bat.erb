@@ -1,0 +1,7 @@
+mountvol <%= Conf::Build.drive_letter %>: /D
+net use <%= Conf::Build.drive_letter %>: <%= Conf::Build.unc_path.to_win_path %>
+<% packages.each do |package| %>
+<% package[:files].each do |file| %>
+msiexec.exe /qn /i "<%= "#{destination}#{File.basename(file)}" %>" /Liwec "install_<%= File.basename(file, ".msi") %>.log" <%= package[:parameters] %>
+<% end %>
+<% end %>

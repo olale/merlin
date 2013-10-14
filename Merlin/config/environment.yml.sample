@@ -1,0 +1,14 @@
+# Allowed values are 'development', 'production'
+env: development
+# Uncomment the products that are active in your configuration
+products:
+ - a
+#   - b
+#  - c
+product: a
+
+local_root: c:/TFS # on byggburken
+
+
+# Use the Turn gem for test output formatting: https://github.com/TwP/turn
+use_turn: false

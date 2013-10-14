@@ -1,0 +1,5 @@
+-- Compatibility level 90 = SQL Server 2005, 100 = SQL Server 2008, 110 = SQL Server 2012
+if not exists(select [compatibility_level] from sys.databases where name = '<%= db %>' and [compatibility_level] < 90) 
+   select 1
+else
+   select 0

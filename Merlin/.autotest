@@ -1,0 +1,32 @@
+require "autotest/restart"
+class Autotest
+  ##
+  # Convert a path in a string, s, into a class name, changing
+  # underscores to CamelCase, etc.
+
+  def path_to_classname(s)
+    sep = File::SEPARATOR
+    f = s.sub(/^test#{sep}/, '').sub(/\.rb$/, '').split(sep)
+    f = f.map { |path| path.split(/_|(\d+)/).map { |seg| seg.capitalize }.join }
+    f = f.map { |path| path =~ /Test$/ ? path : "#{path}Test"  }
+    f.last #.join('::')
+  end
+
+end
+
+
+Autotest.add_hook :initialize do |at|
+  at.clear_mappings
+  
+  at.add_mapping(/^lib\/(.*)\.rb$/) { |_, m|
+    Dir["test/unit/**/#{m[1]}_test.rb"]
+  }
+
+  at.add_exception(/_flymake\.rb$/)
+  dir=File.dirname(__FILE__)
+  $LOAD_PATH.unshift(dir)
+  $LOAD_PATH.unshift(File.join(dir,"lib/"))
+  $LOAD_PATH.unshift(File.join(dir,"test/"))
+  
+  require 'test/test_base'
+end

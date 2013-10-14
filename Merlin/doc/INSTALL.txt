@@ -1,0 +1,68 @@
+Copy this folder to your hard drive. 
+
+Dependencies:
+
+	* Ruby (& Rake). Download Ruby 1.9.3 from
+	  http://rubyinstaller.org/downloads/ and check "Add Ruby
+	  executables to your PATH" during installation.
+
+	  Note: An issue with Bundler/Rubygems and a SSL Certificate,
+	  along with limited gem support for Ruby 2.0 (specifically,
+	  the lack of precompiled native mingw libraries for gems
+	  "tiny_tds" & "gtk 1.1.5") restricts us from using Ruby 2.0 as of
+	  2013-04.
+
+	  See:
+
+	  - https://github.com/rails-sqlserver/tiny_tds/issues/110 (Tiny TDS for Ruby 2.0)
+
+	  - http://www.ruby-forum.com/topic/4412070 (Gtk gem supports
+            Ruby 2 in version 1.2.3, but we must use Gtk 1.1.5 until
+            segfaults on Windows are resolved, see
+            http://www.ruby-forum.com/topic/4410886#1097160)
+
+	  -
+	  https://groups.google.com/forum/m/#!topic/rubyinstaller/mg5ailNICvM/discussion
+	  (for general discussions on ABI breakage in Ruby 2.0)
+
+	* The Ruby Gem 'bundler': run "gem install bundler" 
+
+	* All other Ruby gems managed by bundle: run "bundle install" from
+          the folder of this file (INSTALL.txt).
+
+	* For development, if using Emacs: 
+
+	    * Download from http://alpha.gnu.org/gnu/emacs/windows/
+
+	    * Add the contents of the "emacs" directory to your
+	      local $HOME folder (typically
+	      "C:/Users/${USER}/AppData/Roaming/")
+
+	    * Assuming you unpacked Emacs in ${EMACS_HOME}, run
+	    ${EMACS_HOME}/bin/addpm.exe to get links in the start
+	    menu.
+
+	    * Associate .rb files with ${EMACS_HOME}/bin/runemacs.exe
+
+	* Team Foundation Power Tools is required for the
+	  "tfs:uu" and "tfs:tc:uu" tasks. TFPT and other
+	  commands is auto-detected if installed at
+	  C:/Program*/Microsoft Team Foundation Server 2010 Power
+	  Tools/TFPT.exe
+
+	* For IRb enhancements such as completion, copy dotfiles/.irbrc to $HOME
+
+Configuration:
+
+	* copy the config/{logging,environment}.yml.sample to
+	  config/{logging,environment}.yml and modify your settings
+	  as appropriate.  The copied config/{logging,environment}.yml
+	  files are personal and should not be added to version
+	  control.
+
+	* run "rake test:config" to find out if your settings in
+          config/*.yml are correct
+
+	* Change your ${HOME}/.emacs file with the correct path to
+	  tfs/tf-exe to perform TFS tasks from within Emacs (see
+	  http://www.emacswiki.org/emacs/tfs.el).

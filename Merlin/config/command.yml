@@ -1,0 +1,28 @@
+# Team Foundation Power Tools
+tf: c:/Program*/Microsoft Visual Studio 10.0/Common7/IDE/TF.exe
+tfpt: C:/Program*/Microsoft Team Foundation Server 2010 Power Tools/TFPT.exe
+
+# Strong name and signing tools
+sn: c:/Program*/Microsoft SDKs/Windows/v7.0A/Bin/sn.exe
+signtool: c:/Program*/Microsoft SDKs/Windows/v7.0A/Bin/signtool.exe
+
+# VB 6 compiler, available through the VB6 environment
+vb6: c:/Program*/Microsoft Visual Studio/VB98/vb6.exe
+
+# Visual Studio IDE
+devenv: c:/Program*/Microsoft Visual Studio {10,11}.0/Common7/IDE/devenv.exe
+
+# MSTest executable
+mstest_command: c:/Program*/Microsoft Visual Studio {10,11}.0/Common7/IDE/mstest.exe
+
+# Registry server tool
+regsrv: C:/Windows/System32/regsvr32.exe
+
+# WfWI WSI Compiler
+wfwi: C:/Program*/Wise for Windows Installer/WfWI.exe
+
+# MSIInfo
+msiinfo: C:/Program*/Microsoft SDKs/Windows/v{6,7,8}.0A/bin/MsiInfo.exe
+
+# Path to sqlcmd.exe
+sqlcommand: C:/Program*/Microsoft SQL Server/{90,100,110}/Tools/Binn/sqlcmd.exe

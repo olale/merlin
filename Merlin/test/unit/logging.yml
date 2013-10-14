@@ -1,0 +1,38 @@
+# Valid log levels are: debug, info, warn, error & fatal
+log_level: debug
+# Any file name is ok. 
+# The special name STDOUT represents standard output
+log_file: STDOUT
+# For valid values for shift_age, see http://www.ruby-doc.org/stdlib-1.9.3/libdoc/logger/rdoc/Logger.html#method-c-new
+shift_age: daily
+
+log_patterns:
+  - pattern: !ruby/regexp '/Msg.*?You can ignore this Error\./m'
+    # "level: none" means ignore
+    level: none
+  - pattern: !ruby/regexp '/User, group, or role (.*) already exists in the current database/m'
+    replacement: |
+      User \1 already exists.
+    level: debug
+  - pattern: !ruby/regexp '/The module (.*) depends on the missing object .* The module will still be created/m'
+    replacement: |
+      Invalid script order for \1
+    level: debug
+  - pattern: !ruby/regexp '/Msg.+?Invalid column name ([^\.]+?)\./m'
+    replacement: |
+      Table structure update required: missing table column \1
+    level: warn
+  - pattern: !ruby/regexp '/Invalid object name/m'
+    level: warn
+  - pattern: !ruby/regexp '/warning/'
+    level: none
+    command: devenv.exe
+  - pattern: !ruby/regexp '/.* error \w{2}\d+:(.*)/'
+    replacement: |
+      Compilation error: \1
+    level: error
+  - pattern: !ruby/regexp '/([^\n]+?system error[^\n]+?)$/m'
+    replacement: |
+      \1
+    command: devenv.exe
+    level: error

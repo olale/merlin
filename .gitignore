@@ -1,0 +1,11 @@
+*~
+*#*#
+*_flymake.*
+*.log
+Merlin/Gemfile.lock
+*.rb.html
+*_doctor.*
+*_planning.*
+*_pool.*
+Merlin/config/environment.yml
+Merlin/config/logging.yml

@@ -1,0 +1,98 @@
+# Valid log levels are: debug, info, warn, error & fatal
+log_level: info
+
+log_patterns:
+  - pattern: !ruby/regexp '/Msg.*?You can ignore this Error\./m'
+    # "level: none" means ignore, other values should correspond to
+    # log_level above
+    level: none
+  - pattern: !ruby/regexp '/User, group, or role (.*) already exists in the current database/m'
+    replacement: |
+      User \1 already exists.
+    level: debug
+  - pattern: !ruby/regexp '/The module (.*) depends on the missing object .* The module will still be created/m'
+    replacement: |
+      Invalid script order for \1
+    level: debug
+  - pattern: !ruby/regexp '/ignoring upgrade/'
+    level: none
+    command: sqlcmd.exe
+  - pattern: !ruby/regexp '/ERROR: (.*)/'
+    replacement: |
+      [Devenv] \1
+    level: error
+    command: devenv.exe
+  - pattern: !ruby/regexp '/WARNING: (.*)/'
+    replacement: |
+      [Devenv] \1
+    level: warn
+    command: devenv.exe
+  - pattern: !ruby/regexp '/Build: \d+ succeeded or up-to-date, 0 failed/'
+    replacement: |
+      [Devenv] Setup succeeded
+    level: info
+    command: devenv.exe
+  - pattern: !ruby/regexp '/warning \w+\d+: (.*)/'
+    replacement: |
+      [MSBuild] \1
+    level: warn
+    command: msbuild.exe
+  - pattern: !ruby/regexp '/error \w+\d+:(.*)/'
+    replacement: |
+      Compilation error: \1
+    level: error
+    command: msbuild.exe
+  - pattern: !ruby/regexp '/0 Error/'
+    replacement: |
+      [MSBuild] Build succeeded
+    level: info
+    command: msbuild.exe
+  - pattern: !ruby/regexp '/build.*?succeeded.*/i'
+    level: debug
+    command: vb6.exe
+  - pattern: !ruby/regexp '/TF14050: Cannot change item .*/'
+    level: error
+    command: tf.exe
+  - pattern: !ruby/regexp '/.*/' # tf signals lots of errors when
+                                 # performing operations on files
+                                 # unmapped by TFS, so we need to hush it
+    level: debug
+    command: tf.exe
+  - pattern: !ruby/regexp '/.*/' # tfpt uses strange exit codes, and
+                                 # no messages from tfpt should be
+                                 # considered anything else than debug
+                                 # info.
+    level: debug
+    command: tfpt.exe
+  - pattern: !ruby/regexp '/.*.bundler.* warning.*/m'
+    level: none
+    command: ldiff
+  - pattern: !ruby/regexp '/.*/'
+    level: debug
+    command: ldiff
+  - pattern: !ruby/regexp '/TLI library missing/'
+    level: warn
+  - pattern: !ruby/regexp '/Took.* ms/'
+    level: debug
+    command: ScriptDb.exe
+  - pattern: !ruby/regexp '/.*/'
+    level: debug
+    command: robocopy
+  - pattern: !ruby/regexp '/.*/'
+    level: info
+    command: mstest.exe
+  - pattern: !ruby/regexp '/.* error code 0.*/'
+    level: debug
+    command: psexec.exe
+  - pattern: !ruby/regexp '/.* error code 1605.*/'
+    replacement: |
+      Uninstalling non-existent package
+    level: debug
+    command: psexec.exe
+  - pattern: !ruby/regexp '/.*/'
+    level: debug
+    command: net
+  - pattern: !ruby/regexp '/.*/'
+    level: debug
+    command: msiinfo.exe
+

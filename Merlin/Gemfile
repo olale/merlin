@@ -1,0 +1,41 @@
+source "http://rubygems.org"
+
+gem "albacore"
+#gem "win32-file"
+#gem "ocra"
+gem "nokogiri"
+gem "uuidtools"
+gem "mail"
+gem "rake-hooks"
+
+group :console do
+#  gem "win32console"
+#  gem "ansi"
+  gem "wirble"
+  gem "awesome_print"
+end
+
+group :test do
+  gem "minitest", "~> 5.0.2"
+  gem "wrong"
+  #  gem "autotest-standalone"
+  gem "turn"
+end
+
+gem "diff-lcs" # For DB comparisons
+
+group :ui do
+  # UI library using GTK+
+#  gem "gtk2"
+#  gem "green_shoes", "= 1.1.367" # There is a bug in 1.1.373 related
+                                 # to exiting an application
+end
+
+group :migrations do
+  gem "activerecord" # ORM used in Ruby on Rails
+#  gem "tiny_tds", "~> 0.6.0rc1" # SSPI logins when no
+                                # username/password given implemented
+                                # in TinyTDS 0.6.0rc1
+  gem "activerecord-sqlserver-adapter"
+  gem "composite_primary_keys"
+end
